@@ -1,16 +1,42 @@
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
+
+interface WeatherData {
+  location: {
+    name: string;
+  };
+  current: {
+    temp_c: number;
+    condition: {
+      text: string;
+    };
+  };
+}
+
+interface NewsArticle {
+  title: string;
+  // Add other fields if needed
+}
+
+interface NewsData {
+  articles: NewsArticle[];
+}
+
+interface FinanceData {
+  c: number; // current price
+  h: number; // high
+  l: number; // low
+}
 
 interface Props {
-  city: string
-  newsQuery: string
-  stockSymbol: string
-  weatherData: any
-  newsData: any
-  financeData: any
+  city: string;
+  newsQuery: string;
+  stockSymbol: string;
+  weatherData: WeatherData;
+  newsData: NewsData;
+  financeData: FinanceData;
 }
 
 export default function RecentActivityFeature({
-  city,
   newsQuery,
   stockSymbol,
   weatherData,
@@ -31,7 +57,7 @@ export default function RecentActivityFeature({
             className="p-4 bg-gray-100 dark:bg-gray-700 rounded"
           >
             <p className="text-black dark:text-white">
-              🌤 It's currently <strong>{weatherData.current.condition.text}</strong> in{' '}
+              🌤 Its currently <strong>{weatherData.current.condition.text}</strong> in{' '}
               <strong>{weatherData.location.name}</strong> with a temperature of{' '}
               <strong>{weatherData.current.temp_c}°C</strong>.
             </p>
@@ -68,5 +94,5 @@ export default function RecentActivityFeature({
         )}
       </div>
     </div>
-  )
+  );
 }

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   FiMenu,
   FiBell,
@@ -96,10 +97,11 @@ export default function Layout({ children, darkMode, toggleDarkMode }: LayoutPro
 
             {/* Replace with static placeholder or your own profile logic */}
             <Link href="/profile">
-              <img
+              <Image
                 src="https://ui-avatars.com/api/?name=User"
                 alt="Profile"
                 className="w-8 h-8 rounded-full border-2 border-gray-400 hover:scale-105 transition cursor-pointer"
+                width={500} height={300}
               />
             </Link>
           </div>

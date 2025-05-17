@@ -3,27 +3,33 @@ import { UserCircle } from 'lucide-react'
 
 const LOCAL_KEY = 'pgagi-user-profile'
 
+interface User {
+  name: string
+  email: string
+  role: string
+}
+
 export default function ProfileFeature() {
-  const defaultUser = {
+  const defaultUser: User = {
     name: 'Rajesh',
     email: 'rajesh@example.com',
     role: 'Front-End Intern',
   }
 
-  const [user, setUser] = useState(defaultUser)
-  const [tempUser, setTempUser] = useState(user)
+  const [user, setUser] = useState<User>(defaultUser)
+  const [tempUser, setTempUser] = useState<User>(defaultUser)
   const [editMode, setEditMode] = useState(false)
 
-  // Load saved data from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_KEY)
     if (saved) {
-      const parsed = JSON.parse(saved)
-      setUser(parsed)
-      setTempUser(parsed)
-    } else {
-      setUser(defaultUser)
-      setTempUser(defaultUser)
+      try {
+        const parsed = JSON.parse(saved) as User
+        setUser(parsed)
+        setTempUser(parsed)
+      } catch (err) {
+        console.error('Failed to parse user from localStorage:', err)
+      }
     }
   }, [])
 

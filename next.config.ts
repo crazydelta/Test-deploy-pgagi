@@ -3,7 +3,9 @@ import path from 'path'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  
+  images: {
+    domains: ['cdn.weatherapi.com', 'ui-avatars.com'],
+  },
   // Webpack config to support path aliases
   webpack(config) {
     config.resolve.alias = {

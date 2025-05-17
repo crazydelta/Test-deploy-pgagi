@@ -1,4 +1,3 @@
-// src/features/news/index.tsx
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
@@ -12,9 +11,19 @@ const CATEGORIES = [
   'entertainment',
 ]
 
+interface NewsArticle {
+  title: string
+  description: string
+  url: string
+  publishedAt: string
+  source: {
+    name: string
+  }
+}
+
 export default function NewsFeature() {
   const [category, setCategory] = useState('technology')
-  const [news, setNews] = useState<any[]>([])
+  const [news, setNews] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -26,8 +35,12 @@ export default function NewsFeature() {
       if (!res.ok) throw new Error('Failed to fetch news')
       const data = await res.json()
       setNews(data.articles || [])
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('An unexpected error occurred')
+      }
     } finally {
       setLoading(false)
     }
@@ -69,9 +82,7 @@ export default function NewsFeature() {
             rel="noopener noreferrer"
             className="block p-4 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
           >
-            <h3 className="font-semibold text-black dark:text-white">
-              {article.title}
-            </h3>
+            <h3 className="font-semibold text-black dark:text-white">{article.title}</h3>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">
               {article.description}
             </p>

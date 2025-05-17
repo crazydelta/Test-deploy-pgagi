@@ -1,17 +1,32 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY as string
 
+interface WeatherData {
+  location: {
+    name: string
+    country: string
+  }
+  current: {
+    temp_c: number
+    condition: {
+      text: string
+      icon: string
+    }
+  }
+}
+
 export default function WeatherFeature() {
   const [city, setCity] = useState('London')
-  const [weather, setWeather] = useState<any>(null)
+  const [weather, setWeather] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const fetchWeather = async (city: string) => {
+  const fetchWeather = async (cityName: string) => {
     if (!API_KEY) {
-      setError('Missing API key')
+      setError('Missing API key. Please check environment variables.')
       return
     }
 
@@ -19,13 +34,17 @@ export default function WeatherFeature() {
     setError('')
     try {
       const res = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}`
+        `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${cityName}`
       )
       if (!res.ok) throw new Error('City not found')
-      const data = await res.json()
+      const data: WeatherData = await res.json()
       setWeather(data)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('Something went wrong')
+      }
       setWeather(null)
     } finally {
       setLoading(false)
@@ -35,6 +54,12 @@ export default function WeatherFeature() {
   useEffect(() => {
     fetchWeather(city)
   }, [])
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      fetchWeather(city)
+    }
+  }
 
   return (
     <motion.section
@@ -49,7 +74,8 @@ export default function WeatherFeature() {
           className="flex-1 px-3 py-2 border rounded dark:bg-gray-700 dark:text-white"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          placeholder="City name"
+          onKeyDown={handleKeyDown}
+          placeholder="Enter city name"
         />
         <button
           onClick={() => fetchWeather(city)}
@@ -59,7 +85,7 @@ export default function WeatherFeature() {
         </button>
       </div>
       {loading && <p className="text-gray-500 dark:text-gray-400">Loading...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {error && <p className="text-red-600 dark:text-red-400">{error}</p>}
       {weather && (
         <div className="flex items-center justify-between flex-wrap">
           <div>
@@ -73,10 +99,12 @@ export default function WeatherFeature() {
               {weather.current.temp_c}°C
             </p>
           </div>
-          <img
-            src={weather.current.condition.icon}
+          <Image
+            src={`https:${weather.current.condition.icon}`}
             alt="Weather Icon"
             className="w-20 h-20"
+            width={80}
+            height={80}
           />
         </div>
       )}

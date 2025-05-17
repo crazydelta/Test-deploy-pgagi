@@ -5,9 +5,10 @@ const nextConfig: NextConfig = {
   output: 'export',
   reactStrictMode: true,
   images: {
+    unoptimized: true, // ✅ Disable image optimization for static export
     domains: ['cdn.weatherapi.com', 'ui-avatars.com'],
   },
-  // Webpack config to support path aliases
+
   webpack(config) {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
@@ -24,5 +25,3 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-
-

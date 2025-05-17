@@ -1,0 +1,30 @@
+/*! tailwindcss v4.1.7 | MIT License | https://tailwindcss.com */
+.mx-auto {
+  margin-inline: auto;
+}
+.flex {
+  display: flex;
+}
+.min-h-screen {
+  min-height: 100vh;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.bg-gradient-to-r {
+  --tw-gradient-position: to right in oklab;
+  background-image: linear-gradient(var(--tw-gradient-stops));
+}
+.text-center {
+  text-align: center;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
